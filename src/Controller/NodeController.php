@@ -2,6 +2,7 @@
 
 namespace Varspool\DisqueAdmin\Controller;
 
+use Disque\Command\Info;
 use Disque\Connection\Node\Node;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,9 +18,12 @@ class NodeController extends BaseController
     public function showAction(?string $prefix, Request $request)
     {
         $client = $this->getDisque($request);
+        $currentNode = $client->getConnectionManager()->getCurrentNode();
 
-        $info = $client->info();
-        $id = $client->getConnectionManager()->getCurrentNode()->getId();
+        $infoObject = new Info();
+        $rawInfo = $currentNode->execute($infoObject);
+        $info = $infoObject->parse($rawInfo);
+        $id = $currentNode->getId();
 
         return $this->render('node/show.html.twig', [
             'prefix' => $prefix,
