@@ -14,7 +14,7 @@
         {% for queue, count in queues %}
             <tr>
                 <th scope="row">
-                    {% if foo is empty %}
+                    {% if queue is empty %}
                         Empty Queue Name
                     {% else %}
                         <a href="{{ path('disque_admin_queue_show', { 'name': queue, 'prefix': prefix }) }}">
